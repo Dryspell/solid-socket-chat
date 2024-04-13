@@ -11,9 +11,11 @@
     "@solidjs/meta": "^0.29.2",
     "@solidjs/router": "^0.13.2",
     "@solidjs/start": "^1.0.0-rc.0",
+    "@types/three": "^0.163.0",
     "socket.io": "^4.7.4",
     "socket.io-client": "^4.7.4",
     "solid-js": "^1.8.16",
+    "three": "^0.163.0",
     "vinxi": "^0.3.10"
   },
   "engines": {

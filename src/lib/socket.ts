@@ -1,4 +1,4 @@
 import { io } from "socket.io-client";
-import { cSocket } from "~/types/socket";
+import { type clientSocket } from "~/types/socket";
 
-export const socket: cSocket = io({ path: "/api/ws" });
+export const socket: clientSocket = io({ path: "/api/ws" });
