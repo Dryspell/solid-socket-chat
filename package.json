@@ -20,6 +20,7 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.4",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "autoprefixer": "^10.4.19",
