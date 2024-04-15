@@ -80,7 +80,9 @@ export const initGrid = (
 		if (!characterExists(characters, highlightMesh.position)) {
 			if (intersects.length > 0 && characterPrefabs.length) {
 				addCharacter(scene, characters, {
-					gltf: characterPrefabs[0].gltf,
+					gltf: characterPrefabs[
+						Math.floor(Math.random() * characterPrefabs.length)
+					].gltf,
 					data: {},
 					options: { position: highlightMesh.position },
 				});

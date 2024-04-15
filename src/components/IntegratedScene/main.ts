@@ -1,12 +1,25 @@
 import * as THREE from "three";
-
 import Stats from "three/addons/libs/stats.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-
 import { onWindowResize } from "./utils";
 import { type CharacterPrefabs, type Characters } from "./characters";
+
+const modelPaths = [
+	"models/Character_Female_1.gltf",
+	"models/Character_Female_2.gltf",
+	"models/Character_Male_1.gltf",
+	"models/Character_Male_2.gltf",
+	"models/Demon.gltf",
+	"models/Giant.gltf",
+	"models/Goblin.gltf",
+	"models/Hedgehog.gltf",
+	"models/Skeleton.gltf",
+	"models/Skeleton_Armor.gltf",
+	"models/Wizard.gltf",
+	"models/Yeti.gltf",
+	"models/Zombie.gltf",
+];
 
 const initScene = () => {
 	const scene = new THREE.Scene();
@@ -98,12 +111,16 @@ export function animate(
 
 export const load = (characterPrefabs: CharacterPrefabs) => {
 	const loader = new GLTFLoader();
-	loader.load("models/Character_Female_1.gltf", function (gltf) {
-		gltf.scene.traverse(function (object) {
-			// @ts-expect-error - TS2339: Property 'isMesh' does not exist on type 'Object3D<Object3DEventMap>'.
-			if (object.isMesh) object.castShadow = true;
+
+	modelPaths.forEach((modelPath) => {
+		loader.load(modelPath, (gltf) => {
+			gltf.scene.traverse((object) => {
+				// @ts-expect-error - TS2339: Property 'isMesh' does not exist on type 'Object3D<Object3DEventMap>'.
+				if (object.isMesh) object.castShadow = true;
+			});
+			characterPrefabs.push({ gltf });
 		});
-		characterPrefabs.push({ gltf });
 	});
+
 	return loader;
 };
