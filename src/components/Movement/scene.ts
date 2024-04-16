@@ -63,7 +63,6 @@ export const initGrid = (
 		raycaster.setFromCamera(mousePosition, camera);
 		intersects = raycaster.intersectObject(planeMesh);
 		if (intersects?.length > 0) {
-			console.log(intersects[0].point);
 			const highlightPos = new THREE.Vector3()
 				.copy(intersects[0].point)
 				.floor()
@@ -95,20 +94,27 @@ export const initGrid = (
 
 export function constructScene(
 	scene: THREE.Scene,
-	camera: THREE.PerspectiveCamera,
 	characters: Characters,
 	characterPrefabs: CharacterPrefabs
 ) {
-	// ground
 	initLights(scene);
 
-	const mesh = new THREE.Mesh(
+	// ground
+	const groundMesh = new THREE.Mesh(
 		new THREE.PlaneGeometry(100, 100),
 		new THREE.MeshPhongMaterial({ color: 0xcbcbcb, depthWrite: false })
 	);
-	mesh.rotation.x = -Math.PI / 2;
-	mesh.receiveShadow = true;
-	scene.add(mesh);
+	groundMesh.rotation.x = -Math.PI / 2;
+	groundMesh.receiveShadow = true;
+	scene.add(groundMesh);
 
-	initGrid(scene, camera, characters, characterPrefabs);
+	addCharacter(scene, characters, {
+		gltf: characterPrefabs[
+			Math.floor(Math.random() * characterPrefabs.length)
+		].gltf,
+		data: {},
+		options: { position: new THREE.Vector3(0, 0, 0) },
+	});
+
+	return { groundMesh };
 }

@@ -3,6 +3,8 @@ import { type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { setWeight } from "./utils";
 
+export const MOVEMENT_SPEED = 0.032;
+
 export const initCharacterPrefabs = () => [] as { gltf: GLTF }[];
 export type CharacterPrefabs = ReturnType<typeof initCharacterPrefabs>;
 
