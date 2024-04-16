@@ -5,7 +5,7 @@ import { initCharacters, initClickToMove } from "./characters";
 import { constructScene } from "./scene";
 
 export default function Entry() {
-	const [distance, setDistance] = createSignal(0);
+	const [distanceReporter, setDistanceReporter] = createSignal(0);
 
 	onMount(() => {
 		const { scene, camera, renderer, clock, stats } = init();
@@ -34,7 +34,7 @@ export default function Entry() {
 				characters,
 				groundMesh,
 				animationCallbacks,
-				setDistance
+				setDistanceReporter
 			);
 		});
 	});
@@ -48,7 +48,7 @@ export default function Entry() {
 			}}
 		>
 			<div style={{ position: "absolute", top: 0, right: 0 }}>
-				<div>Distance: {distance().toFixed(2)}</div>
+				<div>Distance: {distanceReporter().toFixed(2)}</div>
 			</div>
 			<div
 				style={{

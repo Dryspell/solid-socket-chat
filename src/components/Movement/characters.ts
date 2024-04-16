@@ -2,8 +2,9 @@ import * as THREE from "three";
 import { type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { setWeight } from "./utils";
-import { MOVEMENT_SPEED } from "../IntegratedScene/characters";
 import { type Setter } from "solid-js";
+
+export const MOVEMENT_SPEED = 0.064;
 
 export const initCharacterPrefabs = () => [] as { gltf: GLTF }[];
 export type CharacterPrefabs = ReturnType<typeof initCharacterPrefabs>;
@@ -51,26 +52,18 @@ export const initClickToMove = (
 	characters: Characters,
 	groundMesh: THREE.Mesh,
 	animationCallbacks: Map<string, () => void>,
-	setDistance: Setter<number>
+	setDistanceReporter: Setter<number>
 ) => {
 	const mousePosition = new THREE.Vector2();
 	const raycaster = new THREE.Raycaster();
 	let intersects: THREE.Intersection[];
 
-	window.addEventListener("mousemove", function (e) {
+	window.addEventListener("mousedown", function (e) {
+		if (!e.ctrlKey) return;
 		mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
 		mousePosition.y = -(e.clientY / window.innerHeight) * 2 + 1;
 		raycaster.setFromCamera(mousePosition, camera);
 		intersects = raycaster.intersectObject(groundMesh);
-	});
-	window.addEventListener("mousedown", function (e) {
-		if (!e.ctrlKey) return;
-		// intersects = raycaster.intersectObject(groundMesh);
-		// const mousePosition = new THREE.Vector2(
-		// 	(e.clientX / window.innerWidth) * 2 - 1,
-		// 	-(e.clientY / window.innerHeight) * 2 + 1
-		// );
-		// raycaster.setFromCamera(mousePosition, camera);
 
 		if (intersects.length > 0 && characters.size) {
 			const destination = intersects[0].point;
@@ -78,7 +71,7 @@ export const initClickToMove = (
 			characters.forEach(({ model, mixer, animations }, id) => {
 				const distance = model.position.distanceTo(destination);
 				if (distance > 0.1) {
-					setDistance(distance);
+					setDistanceReporter(distance);
 					model.lookAt(destination);
 					const direction = model.position
 						.clone()
@@ -93,7 +86,7 @@ export const initClickToMove = (
 						model.position.sub(direction);
 
 						const distance = model.position.distanceTo(destination);
-						setDistance(distance);
+						setDistanceReporter(distance);
 
 						if (distance <= 0.1) {
 							animationCallbacks.delete(`move-${id}`);
