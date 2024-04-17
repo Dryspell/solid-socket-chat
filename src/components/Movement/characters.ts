@@ -3,6 +3,9 @@ import { type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { setWeight } from "./utils";
 import { type Setter } from "solid-js";
+import { SelectionBox } from "three/addons/interactive/SelectionBox.js";
+import { SelectionHelper } from "three/addons/interactive/SelectionHelper.js";
+import { type OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export const MOVEMENT_SPEED = 0.064;
 
@@ -43,7 +46,7 @@ export const addCharacter = (
 	);
 	setWeight(idleAction, 1);
 	idleAction.play();
-	characters.set(characterData.id, { model, mixer, animations });
+	characters.set(model.uuid, { model, mixer, animations });
 	return { model, mixer, characterData };
 };
 
@@ -105,5 +108,77 @@ export const initClickToMove = (
 				}
 			});
 		}
+	});
+};
+
+export const initSelectionBox = (
+	characters: Characters,
+	camera: THREE.Camera,
+	cameraControls: OrbitControls,
+	scene: THREE.Scene,
+	renderer: THREE.WebGLRenderer
+) => {
+	const selectionBox = new SelectionBox(camera, scene);
+	const helper = new SelectionHelper(renderer, "selectBox");
+
+
+	document.addEventListener("pointerdown", function (event) {
+		if (event.shiftKey) cameraControls.enabled = false;
+
+		for (const item of selectionBox.collection) {
+			//@ts-expect-error - TS2339: Property 'emissive' does not exist on type 'material'.
+			item.material.emissive.set(0x000000);
+		}
+
+		selectionBox.startPoint.set(
+			(event.clientX / window.innerWidth) * 2 - 1,
+			-(event.clientY / window.innerHeight) * 2 + 1,
+			0.5
+		);
+	});
+
+	document.addEventListener("pointermove", function (event) {
+		if (helper.isDown) {
+			// for (let i = 0; i < selectionBox.collection.length; i++) {
+			// 	//@ts-expect-error - TS2339: Property 'emissive' does not exist on type 'material'.
+			// 	selectionBox.collection[i].material.emissive.set(0x000000);
+			// }
+
+			selectionBox.endPoint.set(
+				(event.clientX / window.innerWidth) * 2 - 1,
+				-(event.clientY / window.innerHeight) * 2 + 1,
+				0.5
+			);
+
+			const allSelected = selectionBox
+				.select()
+				.filter(
+					(item) =>
+						item.parent?.parent?.uuid &&
+						characters.has(item.parent?.parent?.uuid)
+				);
+
+			for (let i = 0; i < allSelected.length; i++) {
+				//@ts-expect-error - TS2339: Property 'emissive' does not exist on type 'material'.
+				allSelected[i].material.emissive.set(0xffffff);
+			}
+		}
+	});
+
+	document.addEventListener("pointerup", function (event) {
+		cameraControls.enabled = true;
+		selectionBox.endPoint.set(
+			(event.clientX / window.innerWidth) * 2 - 1,
+			-(event.clientY / window.innerHeight) * 2 + 1,
+			0.5
+		);
+
+		const allSelected = selectionBox
+			.select()
+			.filter(
+				(item) =>
+					item.parent?.parent?.uuid &&
+					characters.has(item.parent?.parent?.uuid)
+			);
 	});
 };

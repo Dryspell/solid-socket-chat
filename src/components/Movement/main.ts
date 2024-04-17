@@ -3,11 +3,7 @@ import Stats from "three/addons/libs/stats.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { onWindowResize } from "./utils";
-import {
-	initCharacterPrefabs,
-	type CharacterPrefabs,
-	type Characters,
-} from "./characters";
+import { initCharacterPrefabs, type Characters } from "./characters";
 
 const modelPaths = [
 	"models/Character_Female_1.gltf",
@@ -77,14 +73,21 @@ export function init() {
 	const renderer = initRenderer(container);
 
 	const camera = initCamera();
-	initCameraControls(camera, renderer);
+	const cameraControls = initCameraControls(camera, renderer);
 
 	const stats = new Stats();
 	container.appendChild(stats.dom);
 
 	window.addEventListener("resize", onWindowResize(camera, renderer));
 
-	return { scene, camera, renderer, clock, stats };
+	return {
+		scene,
+		camera,
+		cameraControls,
+		renderer,
+		clock,
+		stats,
+	};
 }
 
 export function animate(
@@ -167,7 +170,6 @@ export const load = async () => {
 				if (object.isMesh) object.castShadow = true;
 			});
 			characterPrefabs.push({ gltf });
-			console.log({ characterPrefabs });
 		})
 	);
 

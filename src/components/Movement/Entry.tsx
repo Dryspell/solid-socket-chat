@@ -1,14 +1,19 @@
 import { createSignal, onMount } from "solid-js";
 
 import { animate, init, load } from "./main";
-import { initCharacters, initClickToMove } from "./characters";
+import {
+	initCharacters,
+	initClickToMove,
+	initSelectionBox,
+} from "./characters";
 import { constructScene } from "./scene";
 
 export default function Entry() {
 	const [distanceReporter, setDistanceReporter] = createSignal(0);
 
 	onMount(() => {
-		const { scene, camera, renderer, clock, stats } = init();
+		const { scene, camera, cameraControls, renderer, clock, stats } =
+			init();
 
 		const characters = initCharacters();
 		const animationCallbacks = new Map<string, () => void>();
@@ -35,6 +40,14 @@ export default function Entry() {
 				groundMesh,
 				animationCallbacks,
 				setDistanceReporter
+			);
+
+			initSelectionBox(
+				characters,
+				camera,
+				cameraControls,
+				scene,
+				renderer,
 			);
 		});
 	});

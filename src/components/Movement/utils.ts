@@ -1,5 +1,6 @@
 import type * as THREE from "three";
 import { type Characters } from "./characters";
+import { type EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 
 export function setWeight(
 	action: {
@@ -36,7 +37,8 @@ export const characterExists = (
  */
 export function onWindowResize(
 	camera: THREE.Camera,
-	renderer: THREE.WebGLRenderer
+	renderer: THREE.WebGLRenderer,
+	effectComposer?: EffectComposer
 ) {
 	return () => {
 		// @ts-expect-error - TS2339: Property 'aspect' does not exist on type 'Camera'.
@@ -45,5 +47,6 @@ export function onWindowResize(
 		camera.updateProjectionMatrix();
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
+		effectComposer?.setSize(window.innerWidth, window.innerHeight);
 	};
 }
