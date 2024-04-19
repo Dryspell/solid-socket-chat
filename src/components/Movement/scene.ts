@@ -102,7 +102,7 @@ export function constructScene(
 	// ground
 	const groundMesh = new THREE.Mesh(
 		new THREE.PlaneGeometry(100, 100),
-		new THREE.MeshPhongMaterial({ color: 0xcbcbcb, depthWrite: false })
+		new THREE.MeshPhongMaterial({ color: "#28ed81", depthWrite: false })
 	);
 	groundMesh.rotation.x = -Math.PI / 2;
 	groundMesh.receiveShadow = true;

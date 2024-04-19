@@ -1,6 +1,5 @@
 import type * as THREE from "three";
 import { type Characters } from "./characters";
-import { type EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 
 export function setWeight(
 	action: {
@@ -27,26 +26,3 @@ export const characterExists = (
 	}
 	return false;
 };
-
-/**
- * This function is needed, since animationAction.crossFadeTo() disables its start action and sets
- * the start action's timeScale to ((start animation's duration) / (end animation's duration))
- * @param {THREE.Camera} camera:THREE.Camera
- * @param {THREE.WebGLRenderer} renderer:THREE.WebGLRenderer
- * @returns {() => void}
- */
-export function onWindowResize(
-	camera: THREE.Camera,
-	renderer: THREE.WebGLRenderer,
-	effectComposer?: EffectComposer
-) {
-	return () => {
-		// @ts-expect-error - TS2339: Property 'aspect' does not exist on type 'Camera'.
-		camera.aspect = window.innerWidth / window.innerHeight;
-		// @ts-expect-error - TS2339: Property 'updateProjectionMatrix' does not exist on type 'Camera'.
-		camera.updateProjectionMatrix();
-
-		renderer.setSize(window.innerWidth, window.innerHeight);
-		effectComposer?.setSize(window.innerWidth, window.innerHeight);
-	};
-}

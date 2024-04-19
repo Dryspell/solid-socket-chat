@@ -188,8 +188,8 @@ function init() {
 	mesh.receiveShadow = true;
 	scene.add(mesh);
 
-	const loader = new GLTFLoader();
-	loader.load("models/Character_Female_1.gltf", function (gltf) {
+	const gltfLoader = new GLTFLoader();
+	gltfLoader.load("models/Character_Female_1.gltf", function (gltf) {
 		model = gltf.scene;
 		scene.add(model);
 
@@ -198,17 +198,11 @@ function init() {
 			if (object.isMesh) object.castShadow = true;
 		});
 
-		//
-
 		skeleton = new THREE.SkeletonHelper(model);
 		skeleton.visible = false;
 		scene.add(skeleton);
 
-		//
-
 		createPanel();
-
-		//
 
 		const animations = gltf.animations;
 		console.log(animations);

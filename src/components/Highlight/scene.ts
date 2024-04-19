@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 export const initLights = (scene: THREE.Scene) => {
 	scene.add(new THREE.AmbientLight(0xaaaaaa, 0.6));
@@ -54,7 +55,24 @@ export function constructScene(scene: THREE.Scene, obj3d: THREE.Object3D) {
 
 	group.add(obj3d);
 
-	//
+	const gltfLoader = new GLTFLoader();
+	gltfLoader.load("models/Character_Female_1.gltf", function (gltf) {
+		const model = gltf.scene;
+		model.position.x = Math.random() * 8 - 4;
+		model.position.y = 0;
+		model.position.z = Math.random() * 8 - 4;
+		scene.add(model);
+
+		model.traverse(function (object) {
+			// @ts-expect-error - TS2339: Property 'isMesh' does not exist on type 'Object3D<Object3DEventMap>'.
+			if (object.isMesh) object.castShadow = true;
+		});
+
+		const skeleton = new THREE.SkeletonHelper(model);
+		skeleton.visible = false;
+		scene.add(skeleton);
+	});
+
 	const geometry = new THREE.SphereGeometry(3, 48, 24);
 
 	for (let i = 0; i < 20; i++) {

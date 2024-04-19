@@ -10,7 +10,7 @@ import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 
 import Stats from "three/addons/libs/stats.module.js";
 
-import { initGui } from "./tools";
+import { type defaultParams, initGui } from "./tools";
 import { constructScene, initLights } from "./scene";
 
 const initEffects = (
@@ -138,14 +138,15 @@ const initControls = (camera: THREE.Camera, renderer: THREE.WebGLRenderer) => {
 export function init() {
 	const container = document.getElementById("container");
 	if (!container) throw new Error("Container not found");
-	// document.body.appendChild(container);
-
-	const width = window.innerWidth;
-	const height = window.innerHeight;
 
 	const scene = new THREE.Scene();
 
-	const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+	const camera = new THREE.PerspectiveCamera(
+		45,
+		window.innerWidth / window.innerHeight,
+		0.1,
+		100
+	);
 	camera.position.set(0, 0, 8);
 
 	const { composer, outlinePass, renderer, obj3d } = initEffects(
@@ -176,4 +177,29 @@ export function init() {
 		stats,
 		group,
 	};
+}
+
+export function animate(
+	controls: OrbitControls,
+	composer: EffectComposer,
+	params: ReturnType<typeof defaultParams>,
+	stats: Stats,
+	group: THREE.Group
+) {
+	const animationCallback = () =>
+		animate(controls, composer, params, stats, group);
+	requestAnimationFrame(animationCallback);
+
+	stats.begin();
+
+	const timer = performance.now();
+
+	if (params.rotate) {
+		group.rotation.y = timer * 0.0001;
+	}
+
+	controls.update();
+	composer.render();
+
+	stats.end();
 }

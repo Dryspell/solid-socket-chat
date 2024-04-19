@@ -1,6 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 
-import { animate, init, load } from "./main";
+import { animationUpdate, init, load } from "./main";
 import {
 	initCharacters,
 	initClickToMove,
@@ -14,32 +14,53 @@ export default function Entry() {
 	const [distanceReporter, setDistanceReporter] = createSignal(0);
 
 	onMount(() => {
-		const { scene, camera, cameraControls, renderer, clock, stats } =
-			init();
-
-		const { composer, outlinePass } = initEffects(renderer, camera, scene);
-
-		initTestObjects(scene, renderer, camera, outlinePass);
+		const {
+			scene,
+			camera,
+			cameraControls,
+			renderer,
+			clock,
+			stats,
+			composer,
+			outlinePass,
+		} = init();
 
 		const characters = initCharacters();
-		const animationCallbacks = new Map<string, () => void>();
+
+		const animationCallbacks = new Map<string, () => void>([
+			["stats", () => stats.update()],
+			[
+				"characterAnimations",
+				() => {
+					const mixerUpdateDelta = clock.getDelta();
+
+					characters.forEach(({ mixer }) => {
+						mixer.update(mixerUpdateDelta);
+					});
+				},
+			],
+			[
+				"render",
+				() => {
+					composer
+						? composer.render()
+						: renderer.render(scene, camera);
+				},
+			],
+		]);
+    
+		const animate = () => {
+			animationCallbacks.forEach((callback) => callback());
+			requestAnimationFrame(animate);
+		};
 
 		load().then(({ characterPrefabs }) => {
-			animate(
-				scene,
-				camera,
-				renderer,
-				clock,
-				stats,
-				characters,
-				animationCallbacks,
-				composer
-			);
 			const { groundMesh } = constructScene(
 				scene,
 				characters,
 				characterPrefabs
 			);
+			// initTestObjects(scene);
 
 			initClickToMove(
 				camera,
@@ -49,13 +70,15 @@ export default function Entry() {
 				setDistanceReporter
 			);
 
-			initSelectionBox(
-				characters,
-				camera,
-				cameraControls,
-				scene,
-				renderer
-			);
+			// initSelectionBox(
+			// 	characters,
+			// 	camera,
+			// 	cameraControls,
+			// 	scene,
+			// 	renderer
+			// );
+
+			animate();
 		});
 	});
 

@@ -1,12 +1,7 @@
 import * as THREE from "three";
 import { type OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 
-export const initTestObjects = (
-	scene: THREE.Scene,
-	renderer: THREE.WebGLRenderer,
-	camera: THREE.Camera,
-	outlinePass: OutlinePass
-) => {
+export const initTestObjects = (scene: THREE.Scene) => {
 	const group = new THREE.Group();
 	scene.add(group);
 
@@ -33,38 +28,4 @@ export const initTestObjects = (
 	group.add(torus);
 	torus.receiveShadow = true;
 	torus.castShadow = true;
-
-	let selectedObjects: THREE.Object3D[] = [];
-
-	function addSelectedObject(object: THREE.Object3D) {
-		selectedObjects = [];
-		selectedObjects.push(object);
-	}
-	const raycaster = new THREE.Raycaster();
-	const mouse = new THREE.Vector2();
-
-	function checkIntersection() {
-		raycaster.setFromCamera(mouse, camera);
-
-		const intersects = raycaster.intersectObject(scene, true);
-
-		if (intersects.length > 0) {
-			console.log("intersects", intersects);
-			const selectedObject = intersects[0].object;
-			addSelectedObject(selectedObject);
-			outlinePass.selectedObjects = selectedObjects;
-		} else {
-			// outlinePass.selectedObjects = [];
-		}
-	}
-
-	renderer.domElement.style.touchAction = "none";
-	renderer.domElement.addEventListener("pointermove", (event) => {
-		if (event.isPrimary === false) return;
-
-		mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-		mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-		checkIntersection();
-	});
 };

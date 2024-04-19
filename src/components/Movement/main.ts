@@ -2,9 +2,9 @@ import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { onWindowResize } from "./utils";
 import { initCharacterPrefabs, type Characters } from "./characters";
 import { type EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { initEffects } from "./effects";
 
 const modelPaths = [
 	"models/Character_Female_1.gltf",
@@ -25,7 +25,7 @@ const modelPaths = [
 const initScene = () => {
 	const scene = new THREE.Scene();
 	scene.background = new THREE.Color(0xa0a0a0);
-	scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
+	// scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
 	return scene;
 };
 
@@ -58,7 +58,7 @@ const initCamera = () => {
 
 const initRenderer = (container: HTMLElement) => {
 	const renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setPixelRatio(window.devicePixelRatio);
+	// renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.shadowMap.enabled = true;
 	container.appendChild(renderer.domElement);
@@ -79,7 +79,7 @@ export function init() {
 	const stats = new Stats();
 	container.appendChild(stats.dom);
 
-	window.addEventListener("resize", onWindowResize(camera, renderer));
+	const { composer, outlinePass } = initEffects(renderer, camera, scene);
 
 	return {
 		scene,
@@ -88,46 +88,13 @@ export function init() {
 		renderer,
 		clock,
 		stats,
+		composer,
+		outlinePass,
 	};
 }
 
-export function animate(
-	scene: THREE.Scene,
-	camera: THREE.Camera,
-	renderer: THREE.WebGLRenderer,
-	clock: THREE.Clock,
-	stats: Stats,
-	characters: Characters,
-	callbacks: Map<string, Function>,
-	composer?: EffectComposer
-) {
-	// Render loop
-	const animationCallback = () =>
-		animate(
-			scene,
-			camera,
-			renderer,
-			clock,
-			stats,
-			characters,
-			callbacks,
-			composer
-		);
-	requestAnimationFrame(animationCallback);
-
-	// Get the time elapsed since the last frame, used for mixer update (if not in single step mode)
-	let mixerUpdateDelta = clock.getDelta();
-
-	// Update the animation mixer, the stats panel, and render this frame
-	characters.forEach(({ mixer }) => {
-		mixer.update(mixerUpdateDelta);
-	});
-
+export function animationUpdate(callbacks: Map<string, Function>) {
 	callbacks.forEach((callback) => callback());
-
-	stats.update();
-
-	composer ? composer.render() : renderer.render(scene, camera);
 }
 
 const initLoadingManager = () => {
