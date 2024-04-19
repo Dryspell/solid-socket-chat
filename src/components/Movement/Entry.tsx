@@ -1,13 +1,11 @@
 import { createSignal, onMount } from "solid-js";
-
-import { animationUpdate, init, load } from "./main";
+import { init, load } from "./main";
 import {
 	initCharacters,
 	initClickToMove,
 	initSelectionBox,
 } from "./characters";
 import { constructScene } from "./scene";
-import { initEffects } from "./effects";
 import { initTestObjects } from "./test";
 
 export default function Entry() {
@@ -48,7 +46,7 @@ export default function Entry() {
 				},
 			],
 		]);
-    
+
 		const animate = () => {
 			animationCallbacks.forEach((callback) => callback());
 			requestAnimationFrame(animate);
@@ -70,13 +68,14 @@ export default function Entry() {
 				setDistanceReporter
 			);
 
-			// initSelectionBox(
-			// 	characters,
-			// 	camera,
-			// 	cameraControls,
-			// 	scene,
-			// 	renderer
-			// );
+			initSelectionBox(
+				characters,
+				camera,
+				cameraControls,
+				scene,
+				renderer,
+				outlinePass
+			);
 
 			animate();
 		});
@@ -100,7 +99,17 @@ export default function Entry() {
 					height: "100vh",
 				}}
 				id="container"
-			/>
+			>
+				<style>
+					{`
+        .selectBox {
+          border: 1px solid #55aaff;
+          background-color: rgba(75, 160, 255, 0.3);
+          position: fixed;
+        }
+      `}
+				</style>
+			</div>
 		</div>
 	);
 }

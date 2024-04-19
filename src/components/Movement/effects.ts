@@ -110,7 +110,7 @@ export const initEffects = (
 		effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
 	});
 
-	initHighlighter(camera, renderer, scene, outlinePass);
+	// initHighlighter(camera, renderer, scene, outlinePass);
 
 	return {
 		composer,

@@ -64,8 +64,6 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-//
-
 function animate() {
 	requestAnimationFrame(animate);
 
