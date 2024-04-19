@@ -6,7 +6,7 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 
-const initEffects = (
+export const initEffects = (
 	renderer: THREE.WebGLRenderer,
 	camera: THREE.Camera,
 	scene: THREE.Scene
@@ -39,12 +39,12 @@ const initEffects = (
 	const outputPass = new OutputPass();
 	composer.addPass(outputPass);
 
-	const effectFXAA = new ShaderPass(FXAAShader);
-	effectFXAA.uniforms["resolution"].value.set(
+	const FXAAPass = new ShaderPass(FXAAShader);
+	FXAAPass.uniforms["resolution"].value.set(
 		1 / window.innerWidth,
 		1 / window.innerHeight
 	);
-	composer.addPass(effectFXAA);
+	composer.addPass(FXAAPass);
 
-	return { effectComposer: composer, outlinePass };
+	return { composer, outlinePass, outputPass, FXAAPass, renderPass };
 };

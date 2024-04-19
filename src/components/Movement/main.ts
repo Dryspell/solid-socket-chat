@@ -4,6 +4,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { onWindowResize } from "./utils";
 import { initCharacterPrefabs, type Characters } from "./characters";
+import { type EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 
 const modelPaths = [
 	"models/Character_Female_1.gltf",
@@ -97,11 +98,21 @@ export function animate(
 	clock: THREE.Clock,
 	stats: Stats,
 	characters: Characters,
-	callbacks: Map<string, Function>
+	callbacks: Map<string, Function>,
+	composer?: EffectComposer
 ) {
 	// Render loop
 	const animationCallback = () =>
-		animate(scene, camera, renderer, clock, stats, characters, callbacks);
+		animate(
+			scene,
+			camera,
+			renderer,
+			clock,
+			stats,
+			characters,
+			callbacks,
+			composer
+		);
 	requestAnimationFrame(animationCallback);
 
 	// Get the time elapsed since the last frame, used for mixer update (if not in single step mode)
@@ -116,7 +127,7 @@ export function animate(
 
 	stats.update();
 
-	renderer.render(scene, camera);
+	composer ? composer.render() : renderer.render(scene, camera);
 }
 
 const initLoadingManager = () => {

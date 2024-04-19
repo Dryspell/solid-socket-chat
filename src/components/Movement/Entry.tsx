@@ -7,6 +7,8 @@ import {
 	initSelectionBox,
 } from "./characters";
 import { constructScene } from "./scene";
+import { initEffects } from "./effects";
+import { initTestObjects } from "./test";
 
 export default function Entry() {
 	const [distanceReporter, setDistanceReporter] = createSignal(0);
@@ -14,6 +16,10 @@ export default function Entry() {
 	onMount(() => {
 		const { scene, camera, cameraControls, renderer, clock, stats } =
 			init();
+
+		const { composer, outlinePass } = initEffects(renderer, camera, scene);
+
+		initTestObjects(scene, renderer, camera, outlinePass);
 
 		const characters = initCharacters();
 		const animationCallbacks = new Map<string, () => void>();
@@ -26,7 +32,8 @@ export default function Entry() {
 				clock,
 				stats,
 				characters,
-				animationCallbacks
+				animationCallbacks,
+				composer
 			);
 			const { groundMesh } = constructScene(
 				scene,
@@ -47,7 +54,7 @@ export default function Entry() {
 				camera,
 				cameraControls,
 				scene,
-				renderer,
+				renderer
 			);
 		});
 	});
