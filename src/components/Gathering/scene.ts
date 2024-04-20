@@ -24,75 +24,6 @@ const initLights = (scene: THREE.Scene) => {
 	scene.add(dirLight);
 };
 
-export const initGrid = (
-	scene: THREE.Scene,
-	camera: THREE.PerspectiveCamera,
-	characters: Characters,
-	characterPrefabs: CharacterPrefabs
-) => {
-	const mousePosition = new THREE.Vector2();
-	const raycaster = new THREE.Raycaster();
-	let intersects;
-
-	const planeMesh = new THREE.Mesh(
-		new THREE.PlaneGeometry(100, 100),
-		new THREE.MeshBasicMaterial({
-			side: THREE.DoubleSide,
-			visible: false,
-		})
-	);
-	planeMesh.rotateX(-Math.PI / 2);
-	scene.add(planeMesh);
-
-	const grid = new THREE.GridHelper(100, 100);
-	scene.add(grid);
-
-	const highlightMesh = new THREE.Mesh(
-		new THREE.PlaneGeometry(1, 1),
-		new THREE.MeshBasicMaterial({
-			side: THREE.DoubleSide,
-			transparent: true,
-		})
-	);
-	highlightMesh.rotateX(-Math.PI / 2);
-	highlightMesh.position.set(0.5, 0, 0.5);
-	scene.add(highlightMesh);
-
-	window.addEventListener("mousemove", function (e) {
-		mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
-		mousePosition.y = -(e.clientY / window.innerHeight) * 2 + 1;
-		raycaster.setFromCamera(mousePosition, camera);
-		intersects = raycaster.intersectObject(planeMesh);
-		if (intersects?.length > 0) {
-			const highlightPos = new THREE.Vector3()
-				.copy(intersects[0].point)
-				.floor()
-				.addScalar(0.5);
-			highlightMesh.position.set(highlightPos.x, 0, highlightPos.z);
-
-			if (!characterExists(characters, highlightMesh.position))
-				highlightMesh.material.color.setHex(0xffffff);
-			else highlightMesh.material.color.setHex(0xff0000);
-		}
-	});
-
-	window.addEventListener("mousedown", function (e) {
-		if (!e.ctrlKey) return;
-		if (!characterExists(characters, highlightMesh.position)) {
-			if (intersects.length > 0 && characterPrefabs.length) {
-				addCharacter(scene, characters, {
-					gltf: characterPrefabs[
-						Math.floor(Math.random() * characterPrefabs.length)
-					].gltf,
-					data: {},
-					options: { position: highlightMesh.position },
-				});
-				highlightMesh.material.color.setHex(0xff0000);
-			}
-		}
-	});
-};
-
 export function constructScene(
 	scene: THREE.Scene,
 	characters: Characters,
@@ -126,7 +57,7 @@ export function constructScene(
 			options: {
 				position: new THREE.Vector3(
 					Math.random() * 20 - 10,
-					0,
+					1,
 					Math.random() * 20 - 10
 				),
 			},

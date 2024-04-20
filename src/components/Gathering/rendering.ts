@@ -5,6 +5,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { MapControls } from "three/addons/controls/MapControls.js";
 
 export const initHighlighter = (
 	camera: THREE.Camera,
@@ -119,4 +120,42 @@ export const initEffects = (
 		// outputPass,
 		// renderPass
 	};
+};
+
+export const initCameraControls = (
+	camera: THREE.Camera,
+	renderer: THREE.WebGLRenderer
+) => {
+	const controls = new MapControls(camera, renderer.domElement);
+	controls.listenToKeyEvents(window);
+	controls.enableDamping = true;
+	controls.dampingFactor = 0.05;
+	controls.screenSpacePanning = false;
+	controls.maxPolarAngle = Math.PI / 2;
+	controls.minDistance = 20;
+	controls.maxDistance = 500;
+
+	return controls;
+};
+
+export const initCamera = () => {
+	const camera = new THREE.PerspectiveCamera(
+		60,
+		window.innerWidth / window.innerHeight,
+		1,
+		1000
+	);
+	camera.position.set(0, 40, -40);
+	camera.lookAt(0, 1, 0);
+
+	return camera;
+};
+
+export const initRenderer = (container: HTMLElement) => {
+	const renderer = new THREE.WebGLRenderer({ antialias: true });
+	// renderer.setPixelRatio(window.devicePixelRatio);
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.shadowMap.enabled = true;
+	container.appendChild(renderer.domElement);
+	return renderer;
 };

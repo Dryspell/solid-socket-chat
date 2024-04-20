@@ -35,7 +35,6 @@ function init() {
 
 	controls = new MapControls(camera, renderer.domElement);
 
-	//controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
 
 	controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
 	controls.dampingFactor = 0.05;

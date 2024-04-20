@@ -4,10 +4,10 @@ import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 import { setWeight } from "./utils";
 import { type Setter } from "solid-js";
 import { SelectionBox } from "three/addons/interactive/SelectionBox.js";
-import { SelectionHelper } from "three/addons/interactive/SelectionHelper.js";
 import { type OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { type OutlinePass } from "three/examples/jsm/Addons.js";
 import { type GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { SelectionHelper } from "./selectionHelper";
 
 export const characterModelPaths = [
 	"models/Character_Female_1.gltf",
@@ -161,6 +161,7 @@ export const initSelectionBox = (
 ) => {
 	const selectionBox = new SelectionBox(camera, scene);
 	const helper = new SelectionHelper(renderer, "selectBox");
+	helper.enabled = false;
 
 	document.addEventListener("pointerdown", function (event) {
 		if (!event.shiftKey) {

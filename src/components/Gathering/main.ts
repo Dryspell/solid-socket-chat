@@ -1,15 +1,15 @@
 import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import {
-	characterModelPaths,
-	initCharacterPrefabs,
 	loadCharacterPrefabs,
-	type Characters,
 } from "./characters";
-import { type EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { initEffects } from "./effects";
+import {
+	initCamera,
+	initCameraControls,
+	initEffects,
+	initRenderer,
+} from "./rendering";
 import { loadResourcePrefabs } from "./resources";
 
 const initScene = () => {
@@ -17,42 +17,6 @@ const initScene = () => {
 	scene.background = new THREE.Color(0xa0a0a0);
 	// scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
 	return scene;
-};
-
-const initCameraControls = (
-	camera: THREE.PerspectiveCamera,
-	renderer: THREE.WebGLRenderer
-) => {
-	// Camera Controls
-	const controls = new OrbitControls(camera, renderer.domElement);
-	controls.listenToKeyEvents(window); // optional
-	controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-	controls.dampingFactor = 0.05;
-	controls.screenSpacePanning = false;
-	controls.maxPolarAngle = Math.PI / 2;
-	//
-	return controls;
-};
-
-const initCamera = () => {
-	const camera = new THREE.PerspectiveCamera(
-		45,
-		window.innerWidth / window.innerHeight,
-		1,
-		100
-	);
-	camera.position.set(1, 2, -3);
-	camera.lookAt(0, 1, 0);
-	return camera;
-};
-
-const initRenderer = (container: HTMLElement) => {
-	const renderer = new THREE.WebGLRenderer({ antialias: true });
-	// renderer.setPixelRatio(window.devicePixelRatio);
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.shadowMap.enabled = true;
-	container.appendChild(renderer.domElement);
-	return renderer;
 };
 
 export function init() {
@@ -129,9 +93,6 @@ export const load = async () => {
 
 	const { characterPrefabs } = await loadCharacterPrefabs(loader);
 	const { resourcePrefabs } = await loadResourcePrefabs(loader);
-	// const resourcePrefabs = [] as Awaited<
-	// 	ReturnType<typeof loadResourcePrefabs>
-	// >["resourcePrefabs"];
 
 	return { loader, characterPrefabs, resourcePrefabs };
 };
