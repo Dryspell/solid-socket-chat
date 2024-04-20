@@ -125,10 +125,8 @@ export const initSelectionBox = (
 
 	document.addEventListener("pointerdown", function (event) {
 		if (!event.shiftKey) {
-			helper.enabled = false;
 			return;
 		}
-		helper.enabled = true;
 		cameraControls.enabled = false;
 
 		outlinePass.selectedObjects = [];
@@ -143,26 +141,30 @@ export const initSelectionBox = (
 	});
 
 	document.addEventListener("pointermove", function (event) {
-		if (helper.isDown && event.shiftKey) {
-			selectionBox.endPoint.set(
-				(event.clientX / window.innerWidth) * 2 - 1,
-				-(event.clientY / window.innerHeight) * 2 + 1,
-				0.5
-			);
-
-			const allSelected = selectionBox
-				.select()
-				.filter(
-					(item) =>
-						item.parent?.parent?.uuid &&
-						characters.has(item.parent?.parent?.uuid)
-				);
-			outlinePass.selectedObjects = allSelected;
+		if (!helper.isDown || !event.shiftKey) {
+			return;
 		}
+		selectionBox.endPoint.set(
+			(event.clientX / window.innerWidth) * 2 - 1,
+			-(event.clientY / window.innerHeight) * 2 + 1,
+			0.5
+		);
+
+		const allSelected = selectionBox
+			.select()
+			.filter(
+				(item) =>
+					item.parent?.parent?.uuid &&
+					characters.has(item.parent?.parent?.uuid)
+			);
+		outlinePass.selectedObjects = allSelected;
 	});
 
 	document.addEventListener("pointerup", function (event) {
-		cameraControls.enabled = true;
+		if (!event.shiftKey) {
+			cameraControls.enabled = true;
+			return;
+		}
 		selectionBox.endPoint.set(
 			(event.clientX / window.innerWidth) * 2 - 1,
 			-(event.clientY / window.innerHeight) * 2 + 1,
