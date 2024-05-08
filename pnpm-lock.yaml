@@ -14,6 +14,9 @@ dependencies:
   '@solidjs/start':
     specifier: ^1.0.0-rc.0
     version: 1.0.0-rc.0(solid-js@1.8.16)(vinxi@0.3.11)(vite@5.2.8)
+  '@thisbeyond/solid-dnd':
+    specifier: ^0.7.5
+    version: 0.7.5(solid-js@1.8.16)
   '@types/three':
     specifier: ^0.163.0
     version: 0.163.0
@@ -1392,6 +1395,15 @@ packages:
       - supports-color
       - vinxi
       - vite
+    dev: false
+
+  /@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.16):
+    resolution: {integrity: sha512-DfI5ff+yYGpK9M21LhYwIPlbP2msKxN2ARwuu6GF8tT1GgNVDTI8VCQvH4TJFoVApP9d44izmAcTh/iTCH2UUw==}
+    engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
+    peerDependencies:
+      solid-js: ^1.5
+    dependencies:
+      solid-js: 1.8.16
     dev: false
 
   /@tweenjs/tween.js@23.1.1:
