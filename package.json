@@ -8,14 +8,19 @@
     "version": "vinxi version"
   },
   "dependencies": {
+    "@kobalte/core": "^0.13.1",
     "@solidjs/meta": "^0.29.2",
     "@solidjs/router": "^0.13.2",
     "@solidjs/start": "^1.0.0-rc.0",
     "@thisbeyond/solid-dnd": "^0.7.5",
     "@types/three": "^0.163.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "socket.io": "^4.7.4",
     "socket.io-client": "^4.7.4",
     "solid-js": "^1.8.16",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
     "three": "^0.163.0",
     "vinxi": "^0.3.10"
   },
