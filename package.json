@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@kobalte/core": "^0.13.1",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@solidjs/meta": "^0.29.2",
     "@solidjs/router": "^0.13.2",
     "@solidjs/start": "^1.0.0-rc.0",
