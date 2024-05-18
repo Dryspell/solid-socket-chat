@@ -6,6 +6,7 @@ import type {
 	Socket as SocketforServer,
 } from "socket.io";
 import type { Socket as SocketforClient } from "socket.io-client";
+import { type UnitData } from "./game";
 
 interface SocketServer extends HTTPServer {
 	io?: IOServer;
@@ -19,11 +20,13 @@ export interface ServerToClientEvents {
 	"user-connected": (name: string) => void;
 	"chat-message": (data: { message: string; name: string }) => void;
 	"user-disconnected": (name: string) => void;
+	move: (unitData: UnitData) => void;
 }
 
 export interface ClientToServerEvents {
 	"new-user": (name: string) => void;
 	"send-chat-message": (message: string) => void;
+  "move": (unitData: UnitData) => void;
 }
 
 interface InterServerEvents {
