@@ -40,7 +40,8 @@ export async function GET({ request, nativeEvent }: APIEvent) {
 
 			socket.on("move", (unitData) => {
 				console.log("move", unitData);
-				socket.broadcast.emit("move", unitData);
+				socket.emit("move", unitData);
+				// socket.broadcast.emit("move", unitData);
 			});
 		});
 

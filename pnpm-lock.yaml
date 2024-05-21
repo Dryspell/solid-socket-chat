@@ -26,6 +26,9 @@ dependencies:
   '@types/three':
     specifier: ^0.163.0
     version: 0.163.0
+  big.js:
+    specifier: ^6.2.1
+    version: 6.2.1
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -58,6 +61,9 @@ devDependencies:
   '@flydotio/dockerfile':
     specifier: ^0.5.4
     version: 0.5.4
+  '@types/big.js':
+    specifier: ^6.2.2
+    version: 6.2.2
   '@typescript-eslint/eslint-plugin':
     specifier: ^7.4.0
     version: 7.6.0(@typescript-eslint/parser@7.6.0)(eslint@8.57.0)(typescript@5.4.5)
@@ -1636,6 +1642,10 @@ packages:
       '@babel/types': 7.24.0
     dev: false
 
+  /@types/big.js@6.2.2:
+    resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
+    dev: true
+
   /@types/braces@3.0.4:
     resolution: {integrity: sha512-0WR3b8eaISjEW7RpZnclONaLFDf7buaowRHdqLp4vLj54AsSAYWfh3DRbfiYJY9XDxMgx1B4sE1Afw2PGpuHOA==}
     dev: false
@@ -2353,6 +2363,10 @@ packages:
   /big-integer@1.6.52:
     resolution: {integrity: sha512-QxD8cf2eVqJOOz63z6JIN9BzvVs/dlySa5HGSBH5xtR8dPteIRQnBxxKqkNTiT6jbDTF6jAfrd4oMcND9RGbQg==}
     engines: {node: '>=0.6'}
+    dev: false
+
+  /big.js@6.2.1:
+    resolution: {integrity: sha512-bCtHMwL9LeDIozFn+oNhhFoq+yQ3BNdnsLSASUxLciOb1vgvpHsIO1dsENiGMgbb4SkP5TrzWzRiLddn8ahVOQ==}
     dev: false
 
   /binary-extensions@2.3.0:

@@ -15,6 +15,7 @@
     "@solidjs/start": "^1.0.0-rc.0",
     "@thisbeyond/solid-dnd": "^0.7.5",
     "@types/three": "^0.163.0",
+    "big.js": "^6.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "socket.io": "^4.7.4",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.4",
+    "@types/big.js": "^6.2.2",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "autoprefixer": "^10.4.19",
